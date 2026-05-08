@@ -59,7 +59,7 @@ export default function Login({ onSwitch }) {
         </form>
 
         <div style={{ marginTop: '16px', padding: '12px', background: 'var(--surface2)', borderRadius: '10px', fontSize: '12px', color: 'var(--muted)' }}>
-          💡 Pehli baar? Pehle <strong>Sign Up</strong> karo
+          💡 First time? First <strong>Sign Up</strong>
         </div>
 
         <div className="auth-switch">
