@@ -1,16 +1,234 @@
-# React + Vite
+# TaskFlow — Team Task Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack web application to manage projects, assign tasks, and track progress with **Role-Based Access Control (Admin/Member)**.
 
-Currently, two official plugins are available:
+Built as part of the Ethara.AI Campus Placement Assignment.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🚀 Live Demo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+> 🔗 [https://your-app.railway.app]team-task-manager-production-7419.up.railway.app
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📸 Features
+
+### 🔐 Authentication
+
+- JWT-based Signup & Login
+- Role selection: **Admin** or **Member**
+- Persistent session via localStorage
+
+### 📁 Projects (Admin Only)
+
+- Create, Edit, Delete projects
+- Add/Remove team members per project
+- Members only see their assigned projects
+
+### ✅ Tasks
+
+- Admin: Full CRUD — Create, Edit, Delete, Assign tasks
+- Member: Update status of their own assigned tasks
+- Filter by Status, Priority, Project
+- Overdue task detection with visual highlight
+
+### 📊 Dashboard
+
+- Live stats: To Do, In Progress, Done, Overdue
+- Recent tasks overview
+- Project progress bars
+
+### 👥 Users (Admin Only)
+
+- View all registered users with roles
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer      | Technology                          |
+| ---------- | ----------------------------------- |
+| Frontend   | React 18, Vite, Axios, Lucide Icons |
+| Backend    | Node.js, Express.js                 |
+| Database   | LowDB (JSON file — zero config)     |
+| Auth       | JWT + bcryptjs                      |
+| Deployment | Railway                             |
+
+---
+
+## 📁 Folder Structure
+
+```
+team-task-manager/
+├── backend/
+│   ├── db/
+│   │   └── database.js        # LowDB setup
+│   ├── middleware/
+│   │   └── auth.js            # JWT middleware + role check
+│   ├── routes/
+│   │   ├── auth.js            # Signup / Login
+│   │   ├── projects.js        # Project CRUD + members
+│   │   ├── tasks.js           # Task CRUD + dashboard stats
+│   │   └── users.js           # User listing
+│   ├── server.js              # Express app entry point
+│   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   └── Sidebar.jsx
+│   │   ├── context/
+│   │   │   └── AuthContext.jsx
+│   │   ├── pages/
+│   │   │   ├── Dashboard.jsx
+│   │   │   ├── Projects.jsx
+│   │   │   ├── Tasks.jsx
+│   │   │   ├── Users.jsx
+│   │   │   ├── Login.jsx
+│   │   │   └── Signup.jsx
+│   │   ├── api.js             # Axios API layer
+│   │   ├── App.jsx
+│   │   └── index.css
+│   ├── vite.config.js
+│   └── package.json
+├── railway.toml               # Railway deployment config
+├── .gitignore
+└── README.md
+```
+
+---
+
+## ⚙️ Local Setup
+
+### Prerequisites
+
+- Node.js >= 18
+- npm
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/YOUR_USERNAME/team-task-manager.git
+cd team-task-manager
+```
+
+### 2. Install dependencies
+
+```bash
+# Backend
+cd backend
+npm install
+
+# Frontend
+cd ../frontend
+npm install
+```
+
+### 3. Run the app
+
+Open **two terminals**:
+
+**Terminal 1 — Backend**
+
+```bash
+cd backend
+node server.js
+# ✅ Running on http://localhost:5000
+```
+
+**Terminal 2 — Frontend**
+
+```bash
+cd frontend
+npm run dev
+# ✅ Open http://localhost:5173
+```
+
+---
+
+## 🚂 Deploy on Railway
+
+1. Push code to GitHub
+2. Go to [railway.app](https://railway.app) → **Login with GitHub**
+3. Click **New Project** → **Deploy from GitHub repo**
+4. Select `team-task-manager`
+5. Go to **Variables** tab → Add:
+   ```
+   JWT_SECRET = your_secret_key_here
+   ```
+6. Go to **Settings → Domains** → **Generate Domain**
+7. Your app is live! 🎉
+
+---
+
+## 🔐 API Endpoints
+
+### Auth
+
+| Method | Endpoint           | Description           |
+| ------ | ------------------ | --------------------- |
+| POST   | `/api/auth/signup` | Register new user     |
+| POST   | `/api/auth/login`  | Login & get JWT token |
+
+### Projects
+
+| Method | Endpoint                            | Access     |
+| ------ | ----------------------------------- | ---------- |
+| GET    | `/api/projects`                     | All users  |
+| POST   | `/api/projects`                     | Admin only |
+| PUT    | `/api/projects/:id`                 | Admin only |
+| DELETE | `/api/projects/:id`                 | Admin only |
+| POST   | `/api/projects/:id/members`         | Admin only |
+| DELETE | `/api/projects/:id/members/:userId` | Admin only |
+
+### Tasks
+
+| Method | Endpoint                     | Access                              |
+| ------ | ---------------------------- | ----------------------------------- |
+| GET    | `/api/tasks`                 | All users                           |
+| POST   | `/api/tasks`                 | Admin only                          |
+| PUT    | `/api/tasks/:id`             | Admin (full) / Member (status only) |
+| DELETE | `/api/tasks/:id`             | Admin only                          |
+| GET    | `/api/tasks/dashboard/stats` | All users                           |
+
+### Users
+
+| Method | Endpoint        | Access     |
+| ------ | --------------- | ---------- |
+| GET    | `/api/users`    | Admin only |
+| GET    | `/api/users/me` | All users  |
+
+---
+
+## 👤 Role-Based Access
+
+| Feature            | Admin | Member              |
+| ------------------ | ----- | ------------------- |
+| Create Project     | ✅    | ❌                  |
+| Add/Remove Members | ✅    | ❌                  |
+| Create Task        | ✅    | ❌                  |
+| Assign Task        | ✅    | ❌                  |
+| Update Task Status | ✅    | ✅ (own tasks only) |
+| View Dashboard     | ✅    | ✅                  |
+| View All Users     | ✅    | ❌                  |
+
+---
+
+## 🧪 Quick Test Guide
+
+1. Sign up as **Admin** → Create a project → Add a task → Assign to member
+2. Sign up as **Member** → See assigned tasks → Update status to Done
+3. Check Dashboard → Stats update live
+
+---
+
+## 👨‍💻 Author
+
+**Ujjwal**
+B.Tech CSE 2026 — Maharishi Markandeshwar Deemed to be University
+
+---
+
+## 📄 License
+
+MIT License — Free to use and modify
