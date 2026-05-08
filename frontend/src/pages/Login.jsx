@@ -105,7 +105,7 @@ export default function Login({ onSwitch }) {
             color: "var(--muted)",
           }}
         >
-          💡 First time? First <strong>Sign Up</strong>
+          💡 New here? Create your account
         </div>
 
         <div className="auth-switch">
