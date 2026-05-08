@@ -13,7 +13,7 @@ export default function Login({ onSwitch }) {
     e.preventDefault();
     setError("");
     if (!form.email || !form.password) {
-      setError("Email aur password dono required hain");
+      setError("Email and Password both required ");
       return;
     }
     setLoading(true);
@@ -23,7 +23,7 @@ export default function Login({ onSwitch }) {
       toast.success(`Welcome back, ${res.data.user.name}!`);
     } catch (err) {
       const msg =
-        err.response?.data?.error || "Login failed - backend band hai?";
+        err.response?.data?.error || "Login failed - backend not working?";
       setError(msg);
       toast.error(msg);
     } finally {
