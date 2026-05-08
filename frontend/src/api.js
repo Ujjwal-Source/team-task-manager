@@ -1,12 +1,25 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api' });
+const API = axios.create({ 
+  baseURL: '/api'  // ✅ Yahi fix hai - localhost hata diya
+});
 
 API.interceptors.request.use(config => {
   const token = localStorage.getItem('token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
+
+API.interceptors.response.use(
+  res => res,
+  err => {
+    if (err.response?.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
+    return Promise.reject(err);
+  }
+);
 
 export const auth = {
   signup: (data) => API.post('/auth/signup', data),

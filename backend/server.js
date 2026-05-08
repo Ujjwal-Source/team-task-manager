@@ -9,16 +9,24 @@ const userRoutes = require('./routes/users');
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+// ✅ Fix - proper CORS
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-// API Routes
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Health check
+app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
+
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/users', userRoutes);
 
-// Serve frontend in production
 const buildPath = path.join(__dirname, '../frontend/build');
 app.use(express.static(buildPath));
 app.get('/{*path}', (req, res) => {
@@ -26,4 +34,4 @@ app.get('/{*path}', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
