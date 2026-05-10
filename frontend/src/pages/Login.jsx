@@ -13,7 +13,7 @@ export default function Login({ onSwitch }) {
     e.preventDefault();
     setError("");
     if (!form.email || !form.password) {
-      setError("Email and Password both required ");
+      setError("Email and Password both required");
       return;
     }
     setLoading(true);
@@ -94,19 +94,6 @@ export default function Login({ onSwitch }) {
             )}
           </button>
         </form>
-
-        <div
-          style={{
-            marginTop: "16px",
-            padding: "12px",
-            background: "var(--surface2)",
-            borderRadius: "10px",
-            fontSize: "12px",
-            color: "var(--muted)",
-          }}
-        >
-          💡 New here? Create your account
-        </div>
 
         <div className="auth-switch">
           Don't have an account? <a onClick={onSwitch}>Sign up</a>
